@@ -1,50 +1,42 @@
-import React, { useState } from "react";
+import React from "react";
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
-import { StatusBar, StyleSheet, Text, View, SafeAreaView } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import { ThemeProvider } from "styled-components/native";
+
+import { useFonts, Oswald_400Regular } from '@expo-google-fonts/oswald';
+import { useFonts as useLato, Lato_400Regular } from '@expo-google-fonts/lato';
+
+import { theme } from "./src/infrastructure/theme";
+import RestaurantsScreen from "./src/features/restaurants/screens/restaurants.screen";
 
 export default function App() {
+  let [fontsLoaded, fontError] = useFonts({
+    Oswald_400Regular,
+    Lato_400Regular
+  });
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
 
-  const [searchQuery, setSearchQuery] = useState('');
+  // let [fontsLoadedLato, fontErrorL] = useLato({
+  //   Lato_400Regular,
+  // });
+  // if (!fontsLoadedLato && !fontErrorL) {
+  //   return null;
+  // }
 
-
-  const onChangeSearch = query => setSearchQuery(query);
+  // if(!fontsLoadedOswald || !fontsLoadedLato){
+  //   return null;
+  // }
 
   return (
     <>
-    <SafeAreaView style={styles.container}>
-      <View style={styles.searchBar}>
-        <Searchbar
-           placeholder="Search"
-           onChangeText={onChangeSearch}
-           value={searchQuery}
-        />
-      </View>
-      <View style={styles.list}>
-        <Text>List</Text>
-      </View>
-    </SafeAreaView>
+    <ThemeProvider theme={theme}>
+      <RestaurantsScreen />
+    </ThemeProvider>
+
     <ExpoStatusBar style='auto' />
     </>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // backgroundColor: 'white',
-    marginTop: StatusBar.currentHeight,
-    // paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-  },
-  searchBar: {
-    // flex: 0.05,
-    backgroundColor: 'green',
-    padding: 16,
-    // justifyContent: 'center',
-  },
-  list: {
-    flex: 1,
-    backgroundColor: 'blue',
-    padding: 16,
-  }
-});
+
